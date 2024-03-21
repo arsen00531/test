@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
+import { ArticleModule } from './article/article.module';
 import configuration from './config/configuration';
+import { Article } from './article/entities/article.entity';
 
 @Module({
   imports: [
@@ -11,14 +15,16 @@ import configuration from './config/configuration';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get('TYPEORM_URL'),
-        entities: ['/**/*.entity{.ts,.js}'],
+        entities: [User, Article],
         synchronize: true,
       }),
     }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
-    })
+    }),
+    UserModule,
+    ArticleModule
   ],
   controllers: [],
   providers: [],
