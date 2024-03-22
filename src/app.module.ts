@@ -3,7 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { ArticleModule } from './article/article.module';
-
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { ArticleModule } from './article/article.module';
       isGlobal: true,
     }),
     UserModule,
-    ArticleModule
+    ArticleModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
