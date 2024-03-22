@@ -1,37 +1,12 @@
-import { ConfigService } from "@nestjs/config";
+import { config } from "dotenv"
 import { DataSource } from "typeorm"
 
-export class AppDataSource {
-    dataSource: DataSource;
-    constructor(
-        configService: ConfigService
-    ) {
-        this.dataSource = new DataSource({
-            type: "postgres",
-            host: "localhost",
-            port: 54321,
-            username: "root",
-            password: "admin",
-            database: "test",
-            entities: ['dist/**/entities/*.entity.js'],
-            migrations: ['migrations/*.ts'],
-            migrationsTableName: "custom_migration_table",
-        });
-    }
+config()
 
-    getDataSource(): DataSource {
-        return this.dataSource
-    }
-}
-
-export default new DataSource ({
+export default new DataSource({
     type: "postgres",
-    host: "localhost",
-    port: 54321,
-    username: "root",
-    password: "admin",
-    database: "test",
-    entities: ['dist/**/entities/*.entity.js'],
-    migrations: ['migrations/*.ts'],
-    migrationsTableName: "custom_migration_table",
+    url: process.env.TYPEORM_URL,
+    entities: [process.env.ENTITIES],
+    migrations: [process.env.MIGRATIONS],
+    migrationsTableName: "migration_table",
 })
