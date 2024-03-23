@@ -4,7 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { ArticleModule } from './article/article.module';
 import { AuthModule } from './auth/auth.module';
-import { JwtModule } from '@nestjs/jwt';
+import { User } from './user/entities/user.entity';
+import { Article } from './article/entities/article.entity';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
@@ -13,7 +15,9 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: "postgres",
-        url: configService.get('TYPEORM_URL')
+        url: configService.get('TYPEORM_URL'),
+        entities: [User, Article],
+        synchronize: true
       })
     }),
     ConfigModule.forRoot({
@@ -21,7 +25,8 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     UserModule,
     ArticleModule,
-    AuthModule
+    AuthModule,
+    TokenModule
   ],
   controllers: [],
   providers: [],
