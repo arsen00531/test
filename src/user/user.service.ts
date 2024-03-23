@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -16,14 +16,23 @@ export class UserService {
     }
 
     async findOneBy(dto: UserDto) {
+        if(!dto) {
+            throw new BadRequestException('Wrong data')
+        }
         return await this.userRepository.findOneBy(dto)
     }
 
     async findOneById(id: number): Promise<User> {
+        if(!id) {
+            throw new BadRequestException('Wrong id')
+        }
         return await this.userRepository.findOneBy({ id })
     }
 
     async findOneByEmail(email: string) {
+        if(!email) {
+            throw new BadRequestException('Wrong email')
+        }
         return await this.userRepository.findOneBy({ email })
     }
 

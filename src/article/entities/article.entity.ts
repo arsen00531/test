@@ -13,9 +13,9 @@ export class Article {
     @Column()
     description: string
 
-    @ManyToOne(() => User, (user) => user.articles)
-    author: User
-
     @CreateDateColumn()
     date: Date
+
+    @ManyToOne(() => User, (user) => user.articles)
+    author: User
 }
