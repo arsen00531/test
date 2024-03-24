@@ -15,7 +15,7 @@ export class AuthService {
         const candidate = await this.userService.findOneByEmail(userDto.email)
 
         if(candidate) {
-            return new BadRequestException('User already exists')
+            throw new BadRequestException('User already exists')
         }
 
         const hashPassword = await hash(userDto.password, 7)
@@ -37,7 +37,7 @@ export class AuthService {
         })
     }
 
-    private async validateUser(userDto: UserDto) {
+    async validateUser(userDto: UserDto) {
         const user = await this.userService.findOneByEmail(userDto.email)
         
         if(user && (await compare(userDto.password, user.password))) {
