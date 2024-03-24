@@ -11,10 +11,12 @@ export class UserService {
         private readonly userRepository: Repository<User>,
     ) {}
 
+    // нахождение всех пользователей
     async findAll(): Promise<User[]> {
         return await this.userRepository.find()
     }
 
+    // нахождение пользователя по dto
     async findOneBy(dto: UserDto) {
         if(!dto) {
             throw new BadRequestException('Wrong data')
@@ -22,6 +24,7 @@ export class UserService {
         return await this.userRepository.findOneBy(dto)
     }
 
+    // нахождение пользователя по id
     async findOneById(id: number): Promise<User> {
         if(!id) {
             throw new BadRequestException('Wrong id')
@@ -29,6 +32,7 @@ export class UserService {
         return await this.userRepository.findOneBy({ id })
     }
 
+    // нахождение пользователя по email
     async findOneByEmail(email: string) {
         if(!email) {
             throw new BadRequestException('Wrong email')
@@ -36,6 +40,7 @@ export class UserService {
         return await this.userRepository.findOneBy({ email })
     }
 
+    // сохранение нового пользователя
     async save(user: UserDto) {
         return await this.userRepository.save(user)
     }

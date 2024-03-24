@@ -16,6 +16,7 @@ export class ArticleService {
         private readonly redisService: RedisService
     ) {}
 
+    // создание новой статьи
     async create(articleDto: ArticleDto) {
         const user = await this.userService.findOneByEmail(articleDto.email)
         if(!user) {
@@ -29,6 +30,7 @@ export class ArticleService {
         })
     }
 
+    // Нахождение всех статей с пагинацией и фильтром по дате и email автора
     async findAll(query: Query) {
         const page = Number(query.page) || 1
         const limit = Number(query.limit) || 10
@@ -49,10 +51,12 @@ export class ArticleService {
         return articles
     }
 
+    // Нахождение статьи по id
     async findOne(id: number) {
         return await this.articleRepository.findOneBy({ id })
     }
 
+    // изменение статьи по id
     async update(id: number, articleDto: ArticleDto) {
         const article = await this.findOne(id)
         if(!article) {
@@ -66,6 +70,7 @@ export class ArticleService {
         return await this.articleRepository.save(article)
     }
 
+    // удаление статьи
     async delete(id: number) {
         const article = await this.findOne(id)
         if(!article) {

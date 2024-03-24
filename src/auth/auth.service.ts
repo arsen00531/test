@@ -11,6 +11,7 @@ export class AuthService {
         private readonly tokenService: TokenService
     ) {}
 
+    // создание нового пользователя
     async registration(userDto: UserDto) {
         const candidate = await this.userService.findOneByEmail(userDto.email)
 
@@ -27,6 +28,7 @@ export class AuthService {
         })
     }
 
+    // авторизация пользователя по jwt token
     async login(userDto: UserDto) {
         const user = await this.validateUser(userDto)
 
@@ -37,6 +39,7 @@ export class AuthService {
         })
     }
 
+    // валидация пользователя
     async validateUser(userDto: UserDto) {
         const user = await this.userService.findOneByEmail(userDto.email)
         
