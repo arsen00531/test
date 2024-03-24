@@ -19,7 +19,7 @@ export class ArticleService {
     async create(articleDto: ArticleDto) {
         const user = await this.userService.findOneByEmail(articleDto.email)
         if(!user) {
-            return new BadRequestException("Wrong email")
+            throw new BadRequestException("Wrong email")
         }
 
         return await this.articleRepository.save({
@@ -56,7 +56,7 @@ export class ArticleService {
     async update(id: number, articleDto: ArticleDto) {
         const article = await this.findOne(id)
         if(!article) {
-            return new BadRequestException("Wrong article")
+            throw new BadRequestException("Wrong article")
         }
 
         Object.assign(article, articleDto)
@@ -69,7 +69,7 @@ export class ArticleService {
     async delete(id: number) {
         const article = await this.findOne(id)
         if(!article) {
-            return new BadRequestException("Wrong article")
+            throw new BadRequestException("Wrong article")
         }
         await this.redisService.del('findAll')
         
