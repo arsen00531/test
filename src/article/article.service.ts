@@ -5,13 +5,15 @@ import { Between, Repository } from 'typeorm';
 import { ArticleDto } from './dto/article.dto';
 import { UserService } from 'src/user/user.service';
 import { Query } from 'express-serve-static-core'
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class ArticleService {
     constructor(
         @InjectRepository(Article)
         private readonly articleRepository: Repository<Article>,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly redisService: RedisService
     ) {}
 
     async create(articleDto: ArticleDto) {
@@ -59,6 +61,8 @@ export class ArticleService {
 
         Object.assign(article, articleDto)
 
+        await this.redisService.del('findAll')
+
         return await this.articleRepository.save(article)
     }
 
@@ -67,6 +71,7 @@ export class ArticleService {
         if(!article) {
             return new BadRequestException("Wrong article")
         }
+        await this.redisService.del('findAll')
         
         return await this.articleRepository.remove(article)
     }

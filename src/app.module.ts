@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './user/entities/user.entity';
 import { Article } from './article/entities/article.entity';
 import { TokenModule } from './token/token.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { TokenModule } from './token/token.module';
     UserModule,
     ArticleModule,
     AuthModule,
-    TokenModule
+    TokenModule,
+    RedisModule
   ],
   controllers: [],
   providers: [],

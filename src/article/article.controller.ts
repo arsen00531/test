@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ArticleDto } from './dto/article.dto';
 import { ArticleService } from './article.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { Query as ExpressQuery } from 'express-serve-static-core';
+import { CacheInterceptor, CacheKey } from '@nestjs/cache-manager';
 
 @UseGuards(JwtGuard)
 @Controller('article')
@@ -17,6 +18,8 @@ export class ArticleController {
         return this.articleService.create(articleDto)
     }
 
+    @UseInterceptors(CacheInterceptor)
+    @CacheKey('findAll')
     @Get('findAll')
     findAll(@Query() query: ExpressQuery) {
         return this.articleService.findAll(query)

@@ -13,3 +13,9 @@ services:
     ports:
       - $POSTGRES_PORT:5432
     restart: always
+  redis:
+    container_name: redis
+    image: redis:7.2.4-alpine
+    restart: always
+    ports:
+      - 6379:6379
