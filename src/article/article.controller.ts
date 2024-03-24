@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ArticleDto } from './dto/article.dto';
 import { ArticleService } from './article.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { Query as ExpressQuery } from 'express-serve-static-core';
 
+@UseGuards(JwtGuard)
 @Controller('article')
 export class ArticleController {
 
@@ -15,27 +17,23 @@ export class ArticleController {
         return this.articleService.create(articleDto)
     }
 
-    @UseGuards(JwtGuard)
-    @Get()
-    findAll() {
-        return this.articleService.findAll()
+    @Get('findAll')
+    findAll(@Query() query: ExpressQuery) {
+        return this.articleService.findAll(query)
     }
 
-    @UseGuards(JwtGuard)
-    @Get(':id')
-    findOne(@Param('id') id: number) {
+    @Get('findOne')
+    findOne(@Query('id') id: number) {
         return this.articleService.findOne(id)
     }
 
-    @UseGuards(JwtGuard)
-    @Put(':id')
-    update(@Param('id') id: number, @Body() articleDto: ArticleDto) {
+    @Put()
+    update(@Query('id') id: number, @Body() articleDto: ArticleDto) {
         return this.articleService.update(id, articleDto)
     }
 
-    @UseGuards(JwtGuard)
-    @Delete(':id')
-    delete(@Param('id') id: number) {
+    @Delete()
+    delete(@Query('id') id: number) {
         return this.articleService.delete(id)
     }
 }

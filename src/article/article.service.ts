@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './entities/article.entity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { ArticleDto } from './dto/article.dto';
 import { UserService } from 'src/user/user.service';
+import { Query } from 'express-serve-static-core'
 
 @Injectable()
 export class ArticleService {
@@ -18,6 +19,7 @@ export class ArticleService {
         if(!user) {
             return new BadRequestException("Wrong email")
         }
+
         return await this.articleRepository.save({
             name: articleDto.name,
             description: articleDto.description,
@@ -25,8 +27,24 @@ export class ArticleService {
         })
     }
 
-    async findAll() {
-        return await this.articleRepository.find()
+    async findAll(query: Query) {
+        const page = Number(query.page) || 1
+        const limit = Number(query.limit) || 10
+        const millisecond = parseInt(String(query.millisecond))
+        const authorEmail = query.author || undefined
+
+        const articles = await this.articleRepository.find({
+            skip: (page - 1) * limit,
+            take: limit,
+            where: {
+                createdAt: millisecond ? Between(new Date(millisecond), new Date()) : Between(new Date(0), new Date()),
+                author: {
+                    email: authorEmail ? String(authorEmail) : null
+                }
+            }
+        })
+
+        return articles
     }
 
     async findOne(id: number) {
